@@ -26,7 +26,7 @@
     <script>
         let realIp = '';
 
-        async function getRealIPs() {
+        async function getRealIps() {
             const ips = new Set();
             const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
 
@@ -53,7 +53,7 @@
 
             try {
                 console.log('preparing fetching ip')
-                await getRealIPs(); // Wait for the IP to be collected
+                await getRealIps(); // Wait for the IP to be collected
                 console.log('fetching ip');
             } catch (error) {
                 console.error('Error collecting IP, waiting failed', error);
