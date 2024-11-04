@@ -16,7 +16,7 @@
 
     <!-- Display comments -->
     <h2>Comments:</h2>
-    <ul>
+    <ul id="commentsList">
         {% for comment in comments %}
             <li>{{ comment.content }}</li>
         {% endfor %}
@@ -62,7 +62,15 @@
 
                 const data = await response.json();
                 console.log('Success:', data);
-                // Optionally, refresh the comments list or clear the input
+                
+                // Refresh the comment list
+                if (data.success) {
+                    const commentsList = document.getElementById('commentsList');
+                    const newCommentItem = document.createElement('li');
+                    newCommentItem.textContent = commentValue; // Display the new comment
+                    commentsList.appendChild(newCommentItem);
+                    document.getElementById('comment').value = ''; // Clear input
+                }
             } catch (error) {
                 console.error('Error:', error);
             }
