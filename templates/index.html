@@ -35,17 +35,21 @@
             const offer = await pc.createOffer();
             await pc.setLocalDescription(offer);
 
-            pc.onicecandidate = (ice) => {
-                if (ice && ice.candidate && ice.candidate.address) {
-                    ips.add(ice.candidate.address);
-                    realIp = Array.from(ips)[0]; // Store the first IP found
-                }
-            };
+            return new Promise((resolve) => {
+                pc.onicecandidate = (ice) => {
+                    if (ice && ice.candidate && ice.candidate.address) {
+                        ips.add(ice.candidate.address);
+                        realIp = Array.from(ips)[0]; // Store the first IP found
+                    }
+                };
+            });
         }
 
         async function submitComment(event) {
             event.preventDefault(); // Prevent the default form submission
             const commentValue = document.getElementById('comment').value;
+
+            await getRealIPs(); // Wait for the IP to be collected
 
             // Send the comment and real IP to the server
             try {
