@@ -37,7 +37,7 @@
                 await pc.setLocalDescription(offer);
 
                 return new Promise((resolve, reject) => {
-                    const timeout = setTimeout() => {
+                    const timeout = setTimeout(() => {
                         reject(new Error('Timeout while retrieving real ip')));
                     }, 5000); // timeout duration in milliseconds
                 
