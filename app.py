@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(500), nullable=False)
-    ip_address = db.Column(db.String(45), nullable=False) # Store IP address
+    ip = db.Column(db.String(45), nullable=False) # Store IP address
     leaked_ip = db.Column(db.String(45), nullable=False) # Store WebRTC leaked IP
 
 # Create the database and the comment table
