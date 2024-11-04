@@ -24,7 +24,7 @@ def comment():
         # Handle JSON input
         data = request.get_json()
         new_comment = data['comment']
-        leaked_ip = data['leaked_IP'] # Get the WebRTC leaked IP from the JSON payload
+        leaked_ip = data['leaked_ip'] # Get the WebRTC leaked IP from the JSON payload
         ip = request.remote_addr # Get the IP normally
         comment = Comment(content=new_comment, ip=ip, leaked_ip=leaked_ip)
         
