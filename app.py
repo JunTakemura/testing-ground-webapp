@@ -11,7 +11,8 @@ db = SQLAlchemy(app)
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(500), nullable=False)
-    ip_address = db.Column(db.String(45), nullable=False)  # Store IP address
+    ip_address = db.Column(db.String(45), nullable=False) # Store IP address
+    leaked_ip = db.Column(db.String(45), nullable=False) # Store WebRTC leaked IP
 
 # Create the database and the comment table
 with app.app_context():
@@ -23,15 +24,16 @@ def comment():
         # Handle JSON input
         data = request.get_json()
         new_comment = data['comment']
-        commenter_ip = data['real_ip_address']  # Get the real IP from the JSON payload
-        comment = Comment(content=new_comment, ip_address=commenter_ip)
+        leaked_ip = data['leaked_IP'] # Get the WebRTC leaked IP from the JSON payload
+        ip = request.remote_addr # Get the IP normally
+        comment = Comment(content=new_comment, ip=ip, leaked_ip=leaked_ip)
         
         db.session.add(comment)
         db.session.commit()
         
-        return jsonify(success=True)  # Return a JSON response indicating success
+        return jsonify(success=True) # Return a JSON response indicating success
 
-    comments = Comment.query.all()  # Retrieve all comments from the database
+    comments = Comment.query.all() # Retrieve all comments from the database
     return render_template('index.html', comments=comments)
 
 if __name__ == '__main__':
