@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 # App configuration
@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(500), nullable=False)
-    ip_address = db.Column(db.String(45), nullable=False)  # Stores IP address
+    ip_address = db.Column(db.String(45), nullable=False)  # Store IP address
 
 # Create the database and the comment table
 with app.app_context():
@@ -20,11 +20,17 @@ with app.app_context():
 @app.route('/', methods=['GET', 'POST'])
 def comment():
     if request.method == 'POST':
-        new_comment = request.form['comment']
-        commenter_ip = request.remote_addr  # Get the commenter's IP address
+        # Handle JSON input
+        data = request.get_json()
+        new_comment = data['comment']
+        commenter_ip = data['real_ip_address']  # Get the real IP from the JSON payload
         comment = Comment(content=new_comment, ip_address=commenter_ip)
+        
         db.session.add(comment)
         db.session.commit()
+        
+        return jsonify(success=True)  # Return a JSON response indicating success
+
     comments = Comment.query.all()  # Retrieve all comments from the database
     return render_template('index.html', comments=comments)
 
