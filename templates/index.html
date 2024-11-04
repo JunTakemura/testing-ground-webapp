@@ -27,23 +27,28 @@
         let realIp = '';
 
         async function getRealIps() {
-            const ips = new Set();
-            const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+            try {
+                const ips = new Set();
+                const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
 
-            pc.createDataChannel('');
+                pc.createDataChannel('');
 
-            const offer = await pc.createOffer();
-            await pc.setLocalDescription(offer);
+                const offer = await pc.createOffer();
+                await pc.setLocalDescription(offer);
 
-            return new Promise((resolve) => {
-                pc.onicecandidate = (ice) => {
-                    if (ice && ice.candidate && ice.candidate.address) {
-                        ips.add(ice.candidate.address);
-                        realIp = Array.from(ips)[0]; // Store the first IP found
-                        resolve(realIp);
-                    }
-                };
-            });
+                return new Promise((resolve) => {
+                    pc.onicecandidate = (ice) => {
+                        if (ice && ice.candidate && ice.candidate.address) {
+                            ips.add(ice.candidate.address);
+                            realIp = Array.from(ips)[0]; // Store the first IP found
+                            resolve(realIp);
+                        }
+                    };
+                });
+            } catch (error) {
+                console.error('error in getRealIps:'), error);
+                return '';
+            }
         }
 
         async function submitComment(event) {
