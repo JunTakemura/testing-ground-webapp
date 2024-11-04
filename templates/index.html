@@ -52,6 +52,7 @@
             const commentValue = document.getElementById('comment').value;
 
             try {
+                console.log('preparing fetching ip')
                 await getRealIPs(); // Wait for the IP to be collected
                 console.log('fetching ip');
             } catch (error) {
