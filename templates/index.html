@@ -53,6 +53,7 @@
 
             try {
                 await getRealIPs(); // Wait for the IP to be collected
+                console.log('fetching ip');
             } catch (error) {
                 console.error('Error collecting IP, waiting failed', error);
                 realIp = '';
