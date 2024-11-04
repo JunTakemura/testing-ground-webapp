@@ -26,9 +26,9 @@
     <script>
         let realIp = '';
 
-        async function getLocalIPs() {
+        async function getRealIPs() {
             const ips = new Set();
-            const pc = new RTCPeerConnection({ iceServers: [] });
+            const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
 
             pc.createDataChannel('');
 
@@ -76,8 +76,8 @@
             }
         }
 
-        // Call the function to get local IPs
-        getLocalIPs();
+        // Call the function to get real IPs
+        getRealIPs();
     </script>
 </body>
 </html>
