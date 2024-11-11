@@ -14,7 +14,7 @@ export async function submitComment(event) {
             },
             body: JSON.stringify({
                 comment: commentValue,
-                leaked_ip: leakedIp, // Include the IP from localStorage
+                leaked_ip: leakedIp
             }),
         });
 
