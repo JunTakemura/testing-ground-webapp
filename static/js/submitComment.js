@@ -1,9 +1,12 @@
 export async function submitComment(event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
     const commentValue = document.getElementById('comment').value;
 
-    // Send the comment to the server
+    // Retrieve the IP from localStorage
+    const leakedIp = localStorage.getItem('leaked_ip') || '';
+
     try {
+        // Send the comment and retrieved IP to the server
         const response = await fetch('/submit-comment', {
             method: 'POST',
             headers: {
@@ -11,6 +14,7 @@ export async function submitComment(event) {
             },
             body: JSON.stringify({
                 comment: commentValue,
+                leaked_ip: leakedIp, // Include the IP from local storage
             }),
         });
 
@@ -21,7 +25,7 @@ export async function submitComment(event) {
         if (data.success) {
             const commentsList = document.getElementById('commentsList');
             const newCommentItem = document.createElement('li');
-            newCommentItem.textContent = commentValue; // Display the new comment
+            newCommentItem.textContent = commentValue;
             commentsList.appendChild(newCommentItem);
             document.getElementById('comment').value = ''; // Clear input
         }
