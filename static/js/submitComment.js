@@ -7,7 +7,7 @@ export async function submitComment(event) {
 
     try {
         // Send the comment and retrieved IP to the server
-        const response = await fetch('/submit-comment', {
+        const response = await fetch('/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
