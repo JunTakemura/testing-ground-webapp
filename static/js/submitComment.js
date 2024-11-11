@@ -13,8 +13,9 @@ export async function submitComment(event) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                comment: 'test'
-            }),
+                comment: commentValue,
+				leaked_ip: leakedIp
+            })
         });
 
         const data = await response.json();
