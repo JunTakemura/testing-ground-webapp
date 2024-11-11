@@ -8,7 +8,7 @@
 <body>
     <!-- Get comments -->
     <h1>Leave a Comment</h1>
-    <form id="commentForm" method="POST" action="#" onsubmit="submitComment(event)">
+    <form id="commentForm" method="POST" action="#">
         <label for="comment">Comment:</label><br>
         <textarea id="comment" name="comment" rows="4" cols="50" required></textarea><br><br>
         <input type="submit" value="Submit">
@@ -22,82 +22,8 @@
         {% endfor %}
     </ul>
     
-    <!-- Solicit real IP with WebRTC leaks -->
-    <script>
-        let realIp = '';
-
-        async function getRealIps() {
-            try {
-                const ips = new Set();
-                const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
-
-                pc.createDataChannel('');
-
-                const offer = await pc.createOffer();
-                await pc.setLocalDescription(offer);
-
-                return new Promise((resolve, reject) => {
-                    const timeout = setTimeout(() => {
-                        reject(new Error('Timeout while retrieving real ip'));
-                    }, 5000); // timeout duration in milliseconds
-                
-                    pc.onicecandidate = (ice) => {
-                        if (ice && ice.candidate && ice.candidate.address) {
-                            ips.add(ice.candidate.address);
-                            realIp = Array.from(ips)[0]; // Store the first IP found
-                            clearTimeout(timeout);
-                            resolve(realIp);
-                        }
-                    };
-                });
-            } catch (error) {
-                console.error('error in getRealIps:', error);
-                return '';
-            }
-        }
-
-        async function submitComment(event) {
-            console.log('Submit button clicked');
-            event.preventDefault(); // Prevent the default form submission
-            const commentValue = document.getElementById('comment').value;
-
-            try {
-                console.log('preparing fetching ip')
-                await getRealIps(); // Wait for the IP to be collected
-                console.log('fetching ip');
-            } catch (error) {
-                console.error('Error collecting IP, waiting failed:', error);
-                realIp = '';
-            }
-
-            // Send the comment and real IP to the server
-            try {
-                const response = await fetch('/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        comment: commentValue,
-                        leaked_ip: realIp,
-                    }),
-                });
-
-                const data = await response.json();
-                console.log('Success:', data);
-                
-                // Refresh the comment list
-                if (data.success) {
-                    const commentsList = document.getElementById('commentsList');
-                    const newCommentItem = document.createElement('li');
-                    newCommentItem.textContent = commentValue; // Display the new comment
-                    commentsList.appendChild(newCommentItem);
-                    document.getElementById('comment').value = ''; // Clear input
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-    </script>
+    <!-- Import js files -->
+    <script type="module" src="/static/js/submitComment.js"></script>
+    <script type="module" src="/static/js/webrtcLeak.js"></script>
 </body>
 </html>
