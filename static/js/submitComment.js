@@ -13,8 +13,7 @@ export async function submitComment(event) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                comment: commentValue,
-                leaked_ip: leakedIp
+                comment: 'test'
             }),
         });
 
