@@ -36,5 +36,14 @@ def comment():
     comments = Comment.query.all() # Retrieve all comments from the database
     return render_template('index.html', comments=comments)
 
+# Login page
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        return f"<h1>Logged in as {username}</h1><p>Password: {password}</p>"
+    return render_template('login.html')
+
 if __name__ == '__main__':
     app.run(host='192.168.0.2', port=8000)
