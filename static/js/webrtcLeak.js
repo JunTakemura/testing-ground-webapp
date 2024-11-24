@@ -5,7 +5,7 @@ export async function getRealIps() {
 
         pc.createDataChannel('');
 
-		// Initiate connection setup
+	// Initiate connection setup
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
 
